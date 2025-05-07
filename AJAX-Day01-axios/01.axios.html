@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01.AJAX概念和axios使用</title>
+
+</head>
+
+<body>
+    <!-- 
+        axios库地址: https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js
+        省份数据地址: http://ajax-api.itheima.net/api/province
+    -->
+    <!-- html -->
+    <div class="container"></div>
+
+    <!-- impot axios in html format-->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- use axios -->
+    <script>
+        //axios object     
+        axios.get('http://ajax-api.itheima.net/api/province').then(function (result) {
+            console.log(result) //Object
+            const data = result.data.data //[['北京', '天津', '河北省',...]
+
+            //render on page
+            document.querySelector('.container').innerHTML = data.join('<br>')
+        })
+    </script>
+</body>
+
+
+</html>
