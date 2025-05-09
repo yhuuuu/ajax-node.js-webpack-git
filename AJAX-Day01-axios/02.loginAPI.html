@@ -64,47 +64,57 @@
         </div>
         <!-- 表单 -->
         <div class="form_wrap">
-            <form>
+            <form class="login-form">
                 <div class="mb-3">
                     <label for="username" class="form-label">账号名</label>
-                    <input type="text" class="form-control username">
+                    <input type="text" class="form-control username" name="username">
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">密码</label>
-                    <input type="password" class="form-control password">
+                    <input type="password" class="form-control password" name="password">
                 </div>
                 <button type="button" class="btn btn-primary btn-login"> 登 录 </button>
             </form>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- <script src="./lib/form-serialize.js"></script> -->
+    <script src= "./lib/form-serialize.js"></script>
+
 
     <script>
 
         // Alert message when the login and password input invalid
         const alertMsg = document.querySelector('.alert')
-        
+
         // Alert message fn - show based on success or failer
-        function alertfn(msg,isSuccess){
-         
-         // show msg box when when success or failer   
-         alertMsg.classList.add('show')
-         alertMsg.innerHTML = msg
-         const bgStyle = isSuccess ? 'alert-success' : 'alert-danger'
-         alertMsg.classList.add(bgStyle)
-         
-         // disappear after 2 seconds
-         setTimeout(()=>{
-            alertMsg.classList.remove('show')
-            alertMsg.classList.remove(bgStyle)
-         },2000)
+        function alertfn(msg, isSuccess) {
+
+            // show msg box when when success or failer   
+            alertMsg.classList.add('show')
+            alertMsg.innerHTML = msg
+            const bgStyle = isSuccess ? 'alert-success' : 'alert-danger'
+            alertMsg.classList.add(bgStyle)
+
+            // disappear after 2 seconds
+            setTimeout(() => {
+                alertMsg.classList.remove('show')
+                alertMsg.classList.remove(bgStyle)
+            }, 2000)
         }
 
         // 目标1：点击登录时，用户名和密码长度判断，并提交数据和服务器通信
         document.querySelector('.btn-login').addEventListener('click', () => {
-            // Get the user input
-            const username = document.querySelector('.username').value
-            const password = document.querySelector('.password').value
+            // Get the user input 
+            // const username = document.querySelector('.username').value
+            // const password = document.querySelector('.password').value
+
+            // Use serialize function to collect username and password
+            // Make sure to add name property within the <input> tab
+            const form = document.querySelector('.login-form')
+            const data = serialize(form, { hash: true, empty: true })
+            console.log(data)
+            const { username, password } = data
 
             // Check the input length 
             if (username.length < 8) {
@@ -123,11 +133,11 @@
             })
                 .then(response => {
                     // console.log(response.data.message);
-                    alertfn(response.data.message,true)
+                    alertfn(response.data.message, true)
                 })
                 .catch(error => {
                     // console.log(error.response.data.message);
-                    alertfn(error.response.data.message,false)
+                    alertfn(error.response.data.message, false)
                 });
 
         })
