@@ -270,56 +270,55 @@
         // 查询参数名: spoken
         // 查询参数值: 我说的消息
 
+        // Selecting and storing references to specific DOM elements
 
         // Chart Box Div
         const chatDiv = document.querySelector('.chat')
         // Chat content <ul>
-        const chatUL = document.querySelector('.chat_list')    
+        const chatUL = document.querySelector('.chat_list')
         // Sent chat input
         const sentInput = document.querySelector('.chat_input')
 
-        // Click event
-        document.querySelector('.send_img').addEventListener('click', () => {
-            // Retrive input box's messgae 
-            const chatMsg = document.querySelector('.chat_input').value
+        // Chat Function 
+        const chatFn = () => {
+            const sentText = sentInput.value
+            chatUL.innerHTML += `
+                <li class="right">
+                    <span>${sentText}</span>
+                    <img src="./assets/me.png" alt="">
+                </li>`
+            sentInput.value = ''
 
-            const li = document.createElement('li')
-            li.classList.add('right')
-            li.innerHTML = `
-                            <span>${chatMsg}</span>
-                            <img src="./assets/me.png" alt="">
-                            `
-            document.querySelector('.chat_list').append(li)
-           document.querySelector('.chat_input').value = ''
-
-
+            // Set scrollBar always at the bottom of the page
+            chatDiv.scrollTop = chatDiv.scrollHeight
 
             //axios
             axios.get('http://hmajax.itheima.net/api/robot', {
                 params: {
-                    spoken: chatMsg
+                    spoken: sentText
                 }
             })
                 .then(response => {
                     const robotText = response.data.data.info.text
-                    console.log(robotText);
-
-                    // create a new li tab
-                    const li = document.createElement('li')
-                    li.classList.add('left')
-                    li.innerHTML = `
-                            <img src="./assets/you.png" alt="">
-                            <span>${response.data.data.info.text}</span>
-                            `
-
-                    document.querySelector('.chat_list').append(li)
-
+                    chatUL.innerHTML += `
+                    <li class="left">
+                        <img src="./assets/you.png" alt="">
+                        <span>${robotText}</span>
+                    </li>`
+                    // Set scrollBar always at the bottom of the page
+                    chatDiv.scrollTop = chatDiv.scrollHeight
                 })
-                .catch(error => {
-                    // console.log(error.response.data.message);
-                });
+        }
 
+        // 1. Sent message - add event listener
+        document.querySelector('.send_img').addEventListener('click', chatFn)
+        // 2. Sent message by pressing enter key
+        document.querySelector('.chat_input').addEventListener('keyup', e => {
+            if (e.keyCode === 13) {
+                chatFn()
+            }
         })
+
 
     </script>
 </body>
