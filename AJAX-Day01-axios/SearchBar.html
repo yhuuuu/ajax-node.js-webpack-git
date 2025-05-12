@@ -307,8 +307,8 @@
         // 目标: 点击搜索按钮(放大镜), 根据关键词搜索商品并铺设列表
 
         const supplierRecommenList = document.querySelector('.supplier-recommen')
-
         document.querySelector('#searchButton').addEventListener('click', () => {
+
             const searchText = document.querySelector('#searchInp').value
 
             axios.get('https://hmajax.itheima.net/api-s/searchGoodsList', {
@@ -316,18 +316,23 @@
                     searchText
                 }
             }).then((response) => {
-
-                console.log(response)
-                console.log(response.data.list.data)
-                const products = response.data.list.data
                 //-----
                 // console.log('Type:', typeof products);
                 // console.log('Is array:', Array.isArray(products));
                 // console.log('Value:', products);
                 //-----
+                const products = response.data.list.data
+                renderProductList(products)
 
-                products.map((item) => {
-                    supplierRecommenList.innerHTML += 
+            })
+        })
+
+        const renderProductList = function (products) {
+            // Clear pervious result
+            supplierRecommenList.innerHTML = ``
+            // Render product list
+            products.forEach((item) => {
+                supplierRecommenList.innerHTML +=
                     `<li>
                         <a>
                             <i>
@@ -349,9 +354,9 @@
                             <div class="evaluate">653条好评</div>
                         </a>
                     </li>`
-                })
             })
-        })
+
+        }
     </script>
 </body>
 
