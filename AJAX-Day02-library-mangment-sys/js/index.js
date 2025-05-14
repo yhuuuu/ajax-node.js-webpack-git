@@ -23,7 +23,7 @@ const getBookList = function () {
                     <td>${book.bookname}</td>
                     <td>${book.author}</td>
                     <td>${book.publisher}</td>
-                    <td>
+                    <td data-id=${book.id}>
                         <span class="del">删除</span>
                         <span class="edit">编辑</span>
                     </td>
@@ -51,7 +51,7 @@ const addModal = new bootstrap.Modal(addModalDom)
 document.querySelector('.modal-footer .add-btn').addEventListener('click', () => {
     const addForm = document.querySelector('.add-form')
     const bookObj = serialize(addForm, { hash: true, empty: true })
-   
+
     axios.post('http://hmajax.itheima.net/api/books', {
         ...bookObj,
         creator
@@ -63,6 +63,32 @@ document.querySelector('.modal-footer .add-btn').addEventListener('click', () =>
         // Hide pop-up window
         addModal.hide()
     })
+})
+
+
+/**
+ * 3.Delete book
+ * 3.1 Use event delegation to listen for delete button clicks and retrieve the book ID
+ * 3.2 Send a DELETE request to the server using the book ID
+ * 3.3 Refresh the book list after deletion
+ */
+
+// 3.1 Event delegation: listen for clicks on delete buttons
+document.querySelector('.list').addEventListener('click', (e) => {
+
+    if (e.target.classList.contains('del')) {
+        // Retrieve book ID from a custom data attribute on the row or button  
+        const bookId = e.target.parentNode.dataset.id
+
+        // 3.2 Send DELETE request    
+        axios.delete(`http://hmajax.itheima.net/api/books/${bookId}`)
+            .then((response) => {
+                //3.3 Re-render book list
+                getBookList()
+            })
+
+    }
+
 })
 
 
