@@ -105,14 +105,17 @@ document.querySelector('.list').addEventListener('click', (e) => {
 // 4.1 Create modal instance
 const editModalDom = document.querySelector('.edit-modal')
 const editModal = new bootstrap.Modal(editModalDom)
+let currentEditId = null
 
 document.querySelector('.list').addEventListener('click', (e) => {
     if (e.target.classList.contains('edit')) {
-        // Target: Autofill book data from the serve 
+        // Objective: Autofill book data from the serve 
 
-        // 4.1.1 Identify the selected boook's id
+        // 4.1.1 Identify the selected book's ID
         const bookId = e.target.parentNode.dataset.id
-        // 4.1.2 Retrieve book info byid 
+        currentEditId = bookId
+
+        // 4.1.2 Retrieve book info by id 
         axios(`http://hmajax.itheima.net/api/books/${bookId}`)
             .then((response) => {
                 const bookObj = response.data.data
@@ -123,9 +126,22 @@ document.querySelector('.list').addEventListener('click', (e) => {
                 //     "publisher": "as"
                 // }
 
+                // 4.1.3 Populate edit form with book data
+
+                // document.querySelector('.edit-form .bookname').value = bookObj.bookname
+
+                const keys = Object.keys(bookObj)
+
+                // Works only if the object keys match the input class names in the form
+                keys.forEach((key) => {
+                    const input = document.querySelector(`.edit-form .${key}`)
+                    if(input) input.value  = bookObj[key]
+                })
+                // Display modal only after form is populated
+                editModal.show()
+
             })
-        // Show pop-up window
-        editModal.show()
+
     }
 })
 // Close pop-up windown after edit saved
