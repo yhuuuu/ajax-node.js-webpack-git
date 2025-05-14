@@ -108,12 +108,24 @@ const editModal = new bootstrap.Modal(editModalDom)
 
 document.querySelector('.list').addEventListener('click', (e) => {
     if (e.target.classList.contains('edit')) {
-        //show pop-up window
+        // Target: Autofill book data from the serve 
+
+        // 4.1.1 Identify the selected boook's id
+        const bookId = e.target.parentNode.dataset.id
+        // 4.1.2 Retrieve book info byid 
+        axios(`http://hmajax.itheima.net/api/books/${bookId}`)
+            .then((response) => {
+                const bookObj = response.data.data
+                // {
+                //     "id": 645524,
+                //     "bookname": "as",
+                //     "author": "as",
+                //     "publisher": "as"
+                // }
+
+            })
+        // Show pop-up window
         editModal.show()
-        
-        
-
-
     }
 })
 // Close pop-up windown after edit saved
