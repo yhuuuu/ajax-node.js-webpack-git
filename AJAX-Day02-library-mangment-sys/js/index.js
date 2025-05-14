@@ -38,6 +38,7 @@ getBookList()
 
 /**
  * 2. Post a new book
+ * 
  * 2.1 Add button -> show and hide
  * 2.2 Collect form data, and sumbit to the server
  * 2.3 Re-render book list
@@ -89,6 +90,35 @@ document.querySelector('.list').addEventListener('click', (e) => {
 
     }
 
+})
+
+/**
+ * 4 Edit book info 
+ * 
+ * * 4.1 Use event delegation to listen for edit button clicks and get book ID
+ * 4.2 Populate form fields with the selected book’s data
+ * 4.3 On "Save", send a PUT request to update book info
+ * 4.4 Refresh book list and close the modal
+ */
+
+
+// 4.1 Create modal instance
+const editModalDom = document.querySelector('.edit-modal')
+const editModal = new bootstrap.Modal(editModalDom)
+
+document.querySelector('.list').addEventListener('click', (e) => {
+    if (e.target.classList.contains('edit')) {
+        //show pop-up window
+        editModal.show()
+        
+        
+
+
+    }
+})
+// Close pop-up windown after edit saved
+document.querySelector('.edit-btn').addEventListener('click', () => {
+    editModal.hide()
 })
 
 
