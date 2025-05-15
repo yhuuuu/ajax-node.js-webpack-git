@@ -127,7 +127,6 @@ document.querySelector('.list').addEventListener('click', (e) => {
                 // }
 
                 // 4.1.3 Populate edit form with book data
-
                 // document.querySelector('.edit-form .bookname').value = bookObj.bookname
 
                 const keys = Object.keys(bookObj)
@@ -135,7 +134,7 @@ document.querySelector('.list').addEventListener('click', (e) => {
                 // Works only if the object keys match the input class names in the form
                 keys.forEach((key) => {
                     const input = document.querySelector(`.edit-form .${key}`)
-                    if(input) input.value  = bookObj[key]
+                    if (input) input.value = bookObj[key]
                 })
                 // Display modal only after form is populated
                 editModal.show()
@@ -146,7 +145,27 @@ document.querySelector('.list').addEventListener('click', (e) => {
 })
 // Close pop-up windown after edit saved
 document.querySelector('.edit-btn').addEventListener('click', () => {
-    editModal.hide()
+
+    // 4.3 Collect new book data
+    const editBookForm = document.querySelector('.edit-form')
+    const editedBookInfo = serialize(editBookForm, { hash: true, empty: true })
+    console.log(editedBookInfo);
+    // {
+    //     "id": "645524",
+    //     "bookname": "as",
+    //     "author": "as",
+    //     "publisher": "as"
+    // }
+    const { id, bookname, author, publisher } = editedBookInfo
+
+    axios.put(`http://hmajax.itheima.net/api/books/${id}`, {
+        bookname,
+        author,
+        creator,
+        publisher
+    }).then((response) => {
+        // Refresh book list and close the modal
+        getBookList()
+        editModal.hide()
+    })
 })
-
-
