@@ -167,5 +167,8 @@ document.querySelector('.edit-btn').addEventListener('click', () => {
         // Refresh book list and close the modal
         getBookList()
         editModal.hide()
+    }).catch((error) => {
+        console.log('Change failed: ', error);
+        alert('Change failed, please check input')
     })
 })
