@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image upload</title>
+</head>
+
+<body>
+    <!-- File upload element -->
+    <input type="file" class="upload">
+    <!-- Image display element -->
+    <img src="" alt="" class="my-img">
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        /**
+        * Goal: Upload an image and display it on the webpage
+        *
+        * Steps:
+        * 1. Listen for file selection and retrieve the image file
+        * 2. Use FormData to encapsulate the image
+        * 3. Send the image to the server via POST request
+        * 4. Set the returned image URL to the <img> element
+        */
+
+        document.querySelector('.upload').addEventListener('change', (e) => {
+            const uploadImgObj = e.target.files[0]
+            // Only proceed if the selected file is an image
+
+            if (uploadImgObj && uploadImgObj.type.startsWith('image/')) {
+
+                const fd = new FormData()
+                fd.append('img', uploadImgObj) //fd.append('img', e.target.files[0])
+
+                // Log FormData content for debugging
+                for (let pair of fd.entries()) {
+                    console.log(pair[0], pair[1]);
+                }
+                // Send POST request to upload the image (Body 参数multipart/form-data)
+
+                axios.post(`http://hmajax.itheima.net/api/uploadimg`, fd)
+                    .then((result) => {
+                        console.log(result);
+                        imageUrl = result.data.data.url
+                        document.querySelector('.my-img').src = imageUrl
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+            } else {
+                alert('Please choose an image file.')
+            }
+        })
+    </script>
+</body>
+
+</html>
