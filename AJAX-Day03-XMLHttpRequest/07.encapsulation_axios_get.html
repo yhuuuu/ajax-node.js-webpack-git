@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>封装_简易axios-获取省份列表</title>
+</head>
+
+<body>
+    <p class="my-p"></p>
+    <script>
+        /**
+        * 步骤：
+        1. 定义 myAxios 函数，接收配置对象，返回 Promise 对象
+        2. 发起 XHR 请求，默认请求方法为 GET
+        3. 调用成功/失败的处理程序
+        4. 使用 myAxios 函数，获取省份列表展示
+        */
+
+        // 1. 定义myAxios函数，接收配置对象，返回Promise对象
+        function myAxios(config) {
+            //return a promise
+            return new Promise((resolve, reject) => {
+                // 2. 发起XHR请求，默认请求方法为GET
+                const xhr = new XMLHttpRequest()
+                xhr.open(config.method || 'GET', config.url)
+                xhr.addEventListener('loadend', () => {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        resolve(JSON.parse(xhr.response))
+
+
+                    } else {
+                        reject(new Error(xhr.repsonse))
+                    }
+                })
+                xhr.send()
+            })
+        }
+
+        // 4. 使用myAxios函数，获取省份列表展示
+        myAxios({
+            url: 'http://hmajax.itheima.net/api/province'
+
+        }).then(result => {
+            console.log(result)
+            document.querySelector('.my-p').innerHTML = result.list.join('<br>')
+
+        }).catch(error => {
+            console.log(error)
+            document.querySelector('.my-p').innerHTML = error.message
+        })
+    </script>
+</body>
+
+</html>

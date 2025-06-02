@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XML Query Parameter</title>
+</head>
+
+<body>
+    <p class="my-p"></p>
+    <script>
+
+    /**
+    * Use Query Parameters for:	Use Body (data) for:
+    * Filters, search terms, sorting	
+    * Creating or updating data (POST, PUT)
+    * Optional or non-sensitive values	
+    * Sensitive or structured data
+    * Pagination or flags (?page=2)	
+    * Form submissions, file uploads  
+    * 
+    * Use query parameters to pass non-essential information that customizes the request.
+    * GET /products?category=shoes&sort=price_asc
+    * GET /users?search=cooper
+    * GET /posts?page=2&limit=10 
+    * 
+    * Query parameters are ideal when you want to narrow down or adjust what is returned, without changing the resource itself
+    * GET /events?date=2025-06-01
+    * GET /books?author=Rowling
+    * 
+    * They’re part of the URL and should not change server data. That’s why you usually use them with GET.
+    
+    
+    */
+
+    // Query Patameter pname
+        const xhr = new XMLHttpRequest()
+
+        xhr.open('GET', 'http://hmajax.itheima.net/api/city?pname=广东省')
+        xhr.addEventListener('loadend', () => {
+            console.log(xhr.response);
+            //JSON -> Object
+            const data = JSON.parse(xhr.response)
+            console.log(data.list);
+
+            document.querySelector('.my-p').innerHTML = 
+            data.list.join('<br>')
+        })
+        xhr.send()
+
+
+    </script>
+</body>
+
+</html>

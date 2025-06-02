@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>封装_简易axios-注册用户</title>
+</head>
+
+<body>
+    <button class="my-btn">Reigster</button>
+    <script>
+        function myAxios(config) {
+            return new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest()
+                xhr.open(config.method || 'GET', config.url)
+                xhr.addEventListener('loadend', () => {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        resolve(xhr.response)
+                    } else {
+                        reject(xhr.response)
+                    }
+                })
+                // 1. 判断有data选项，携带请求体
+                if (config.data) {
+                    // 2. 转换数据类型，在send中发送 Obj->JSON
+                    const jsonStr = JSON.stringify(config.data)
+                    //告诉服务器：我即将发送的请求体（body）是一个 JSON 格式的字符串
+                    xhr.setRequestHeader('Content-Type', 'application/json')
+                    xhr.send(jsonStr)
+                } else {
+                    xhr.send()
+                }
+            })
+        }
+
+        document.querySelector('.my-btn').addEventListener('click', () => {
+            myAxios({
+                url: 'http://hmajax.itheima.net/api/register',
+                method: 'POST',
+                data: {
+                    username: 'cooperbb',
+                    password: '123456'
+                }
+            }).then(result => {
+                console.log(result);
+            }).catch(error => {
+                console.dir(error)
+            })
+        })
+
+    </script>
+</body>
+
+</html>
